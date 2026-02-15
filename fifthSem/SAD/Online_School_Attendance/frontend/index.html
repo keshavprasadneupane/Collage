@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            margin-top: 80px;
+        }
+
+        .container {
+            width: 350px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        form {
+            border: 1px solid #333;
+            padding: 25px;
+            border-radius: 6px;
+        }
+
+        .input {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        input {
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 8px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .info {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Login</h2>
+
+        <form id="loginForm">
+            <div class="input">
+                Email
+                <input type="text" id="email" required>
+            </div>
+
+            <div class="input">
+                Password
+                <input type="password" id="password" required>
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <div class="info">
+            teacher@test.com<br>
+            student@test.com<br>
+            Password: Test1234!
+        </div>
+    </div>
+
+    <script src="script.js">
+    </script>
+</body>
+
+</html>

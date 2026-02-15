@@ -1,0 +1,39 @@
+# --- Old XAMPP/Bitnami Files ---
+/dashboard/
+/img/
+/webalizer/
+/applications.html
+/bitnami.css
+/favicon.ico
+/index.php
+
+# --- Python Specific ---
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+env/
+.env/
+ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# --- Standard PHP/JS/Web Ignore Rules ---
+node_modules/
+vendor/
+.env
+*.log
+
+# --- OS/IDE Specific ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

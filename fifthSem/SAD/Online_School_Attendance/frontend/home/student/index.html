@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Student Attendance</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 40px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background: #f4f4f4;
+        }
+
+        td.present {
+            background: #c8e6c9;
+        }
+
+        td.absent {
+            background: #ffcdd2;
+        }
+
+        button {
+            padding: 6px 12px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Student Attendance</h2>
+    <button onclick="logout()">Logout</button>
+
+    <p id="loading">Loading...</p>
+    <div id="summary"></div>
+    <p id="error" style="color:red;"></p>
+
+    <table>
+        <thead>
+            <tr id="headerRow">
+                <th>Subject / Date</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+
+    <script src="script.js"></script>
+    </script>
+
+</body>
+
+</html>

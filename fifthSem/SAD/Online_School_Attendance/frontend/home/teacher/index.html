@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Teacher Attendance</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        td.present {
+            background-color: #c8e6c9;
+        }
+
+        td.absent {
+            background-color: #ffcdd2;
+        }
+
+        .nav-buttons {
+            margin-bottom: 10px;
+        }
+
+        #submit-btn {
+            margin-top: 10px;
+            padding: 6px 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Class Attendance</h1>
+    <button onclick="logout()">Logout</button>
+
+    <div class="nav-buttons">
+        <button id="prev-day">&lt;</button>
+        <span id="current-date"></span>
+        <button id="next-day">&gt;</button>
+    </div>
+
+    <table>
+        <thead id="table-head"></thead>
+        <tbody id="table-body"></tbody>
+    </table>
+
+    <button id="submit-btn">Submit Updates</button>
+
+    <script src="script.js"></script>
+    </script>
+
+</body>
+
+</html>
