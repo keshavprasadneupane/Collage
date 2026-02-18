@@ -1,5 +1,5 @@
 from typing import Dict, List
-from fastapi import APIRouter, status, HTTPException
+from fastapi import status, HTTPException
 from api.router import api
 from .model import AttendanceResponse, AttendanceUpdate, AttendenceBulkUpdate, AttendenceUpdateResponse, TeacherAttendanceResponse
 from dmodels import Attendance, Class, Class
@@ -35,35 +35,38 @@ def get_attendence_by_teacher(db:DB, class_id: int):
     curl -X GET "http://localhost:8000/api/attendence/teacher?class_id=1" -H "accept: application/json"
     """
 
-    class_info = db.query(Class).filter(Class.id == class_id).first()
-    if not class_info:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class not found")
-    
-    attendences = db.query(Attendance).join(Attendance.student).filter(Attendance.student.has(class_id=class_id)).all()
-    
-    # Extract unique subjects and student names for the class
-    subjects = {}
-    student_names = {}
-    dates = []
-    data: Dict[tuple[int,int,str], str] = {}
+    try:
+        class_info = db.query(Class).filter(Class.id == class_id).first()
+        if not class_info:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Class not found")
+        
+        attendences = db.query(Attendance).join(Attendance.student).filter(Attendance.student.has(class_id=class_id)).all()
+        
+        # Extract unique subjects and student names for the class
+        subjects = {}
+        student_names = {}
+        dates = []
+        data: Dict[tuple[int,int,str], str] = {}
 
-    for attendence in attendences:
-        subjects[attendence.subject_id] = attendence.subject.name
-        student_names[attendence.student_id] = attendence.student.user.name
-        if attendence.date not in dates:
-            dates.append(attendence.date)
-        data[(attendence.student_id, attendence.subject_id, attendence.date)] = attendence.status
+        for attendence in attendences:
+            subjects[attendence.subject_id] = attendence.subject.name
+            student_names[attendence.student_id] = attendence.student.user.name
+            if attendence.date not in dates:
+                dates.append(attendence.date)
+            data[(attendence.student_id, attendence.subject_id, attendence.date)] = attendence.status
 
-    return TeacherAttendanceResponse(
-        class_id=class_id,
-        subjects=[{k: v} for k, v in subjects.items()],
-        student_ids=[{k: v} for k, v in student_names.items()],
-        dates=list(dates),
-        data=data
-    )
-
-
-
+        return TeacherAttendanceResponse(
+            class_id=class_id,
+            subjects=[{k: v} for k, v in subjects.items()],
+            student_ids=[{k: v} for k, v in student_names.items()],
+            dates=list(dates),
+            data=data
+        )
+    except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"An error occurred while fetching attendance for teacher: {str(e)}"
+            )
 
 
 @api.put("/attendance", status_code=status.HTTP_200_OK, response_model=AttendenceUpdateResponse)

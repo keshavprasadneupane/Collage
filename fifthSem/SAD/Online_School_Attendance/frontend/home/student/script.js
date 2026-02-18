@@ -3,11 +3,11 @@ const id = sessionStorage.getItem("respective_id");
 const role = sessionStorage.getItem("user_role");
 
 if (!id || role !== "student")
-    window.location.replace("/login/index.html");
+    window.location.replace("/index.html");
 
 function logout() {
     sessionStorage.clear();
-    window.location.replace("/login/index.html");
+    window.location.replace("/index.html");
 }
 
 fetch(`http://localhost:8000/api/attendance?student_id=${id}`)

@@ -1,46 +1,76 @@
 
-
 const role = sessionStorage.getItem("user_role");
 if (role !== "teacher") {
-    window.location.replace("/login.html");
+    window.location.replace("/index.html");
 }
 
 function logout() {
     sessionStorage.clear();
-    window.location.replace("/login.html");
+    window.location.replace("/index.html");
 }
 
 let attendanceData;
-let currentDateIndex = 0;
+let selectedSubjectId = null;
 const updates = {};
 
 async function loadAttendance() {
     const classId = 1;
-    const response = await fetch(`http://localhost:8000/api/attendence/teacher?class_id=${classId}`);
+
+    const response = await fetch(
+        `http://localhost:8000/api/attendence/teacher?class_id=${classId}`
+    );
+
     attendanceData = await response.json();
+
+    const subjectSelect = document.getElementById('subject-select');
+    subjectSelect.innerHTML = '';
+
+    attendanceData.subjects.forEach(s => {
+        const id = Object.keys(s)[0];
+        const name = Object.values(s)[0];
+
+        const option = document.createElement('option');
+        option.value = id;
+        option.textContent = name;
+        subjectSelect.appendChild(option);
+    });
+
+    selectedSubjectId = Object.keys(attendanceData.subjects[0])[0];
+
+    subjectSelect.onchange = (e) => {
+        selectedSubjectId = e.target.value;
+        renderTable();
+    };
+
     renderTable();
+}
+
+function getStatusClass(status) {
+    if (status === 'P') return 'present';
+    if (status === 'A') return 'absent';
+    return 'notset';
 }
 
 function renderTable() {
 
-    const subjects = attendanceData.subjects.map(s => Object.values(s)[0]);
-    const subjectIds = attendanceData.subjects.map(s => Object.keys(s)[0]);
+    const dates = attendanceData.dates;
+
     const studentEntries = Object.entries(
         attendanceData.student_ids.reduce((acc, s) => ({ ...acc, ...s }), {})
     );
 
-    const date = attendanceData.dates[currentDateIndex];
-    document.getElementById('current-date').innerText = date;
-
     const thead = document.getElementById('table-head');
     thead.innerHTML = '';
+
     const headerRow = document.createElement('tr');
     headerRow.appendChild(document.createElement('th')).innerText = 'Student';
-    subjects.forEach(sub => {
+
+    dates.forEach(date => {
         const th = document.createElement('th');
-        th.innerText = sub;
+        th.innerText = date;
         headerRow.appendChild(th);
     });
+
     thead.appendChild(headerRow);
 
     const tbody = document.getElementById('table-body');
@@ -51,23 +81,34 @@ function renderTable() {
         const tr = document.createElement('tr');
         tr.appendChild(document.createElement('td')).innerText = studentName;
 
-        subjectIds.forEach(subjectId => {
+        dates.forEach(date => {
 
             const td = document.createElement('td');
-            const key = `${studentId},${subjectId},${date}`;
-            const status = updates[key] || attendanceData.data[key] || '-';
 
-            td.innerText = status;
-            td.className = status === 'P' ? 'present' :
-                status === 'A' ? 'absent' : '';
+            const key = `${studentId},${selectedSubjectId},${date}`;
+            const currentStatus =
+                updates[key] ||
+                attendanceData.data[key] ||
+                'N';
 
-            td.addEventListener('click', () => {
-                const newStatus = td.innerText === 'P' ? 'A' : 'P';
-                td.innerText = newStatus;
-                td.className = newStatus === 'P' ? 'present' : 'absent';
+            const select = document.createElement('select');
+            select.className = 'status-select';
+            select.innerHTML = `
+                        <option value="P">P</option>
+                        <option value="A">A</option>
+                        <option value="N">N</option>
+                    `;
+
+            select.value = currentStatus;
+            td.className = getStatusClass(currentStatus);
+
+            select.addEventListener('change', () => {
+                const newStatus = select.value;
                 updates[key] = newStatus;
+                td.className = getStatusClass(newStatus);
             });
 
+            td.appendChild(select);
             tr.appendChild(td);
         });
 
@@ -75,32 +116,18 @@ function renderTable() {
     });
 }
 
-document.getElementById('prev-day').onclick = () => {
-    if (currentDateIndex > 0) {
-        currentDateIndex--;
-        renderTable();
-    }
-};
-
-document.getElementById('next-day').onclick = () => {
-    if (currentDateIndex < attendanceData.dates.length - 1) {
-        currentDateIndex++;
-        renderTable();
-    }
-};
-
 document.getElementById('submit-btn').onclick = async () => {
 
-    const date = attendanceData.dates[currentDateIndex];
     const payload = [];
 
     for (const [key, status] of Object.entries(updates)) {
-        const [studentId, subjectId, updateDate] = key.split(',');
-        if (updateDate === date) {
+        const [studentId, subjectId, date] = key.split(',');
+
+        if (subjectId === selectedSubjectId) {
             payload.push({
                 student_id: parseInt(studentId),
                 subject_id: parseInt(subjectId),
-                date: updateDate,
+                date: date,
                 status: status
             });
         }
@@ -112,19 +139,23 @@ document.getElementById('submit-btn').onclick = async () => {
     }
 
     try {
-        const response = await fetch('http://localhost:8000/api/attendances', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
+        const response = await fetch(
+            'http://localhost:8000/api/attendances',
+            {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }
+        );
 
         if (!response.ok) throw new Error();
 
         alert('Attendance updated successfully.');
 
         payload.forEach(p => {
-            attendanceData.data[`${p.student_id},${p.subject_id},${p.date}`] = p.status;
-            delete updates[`${p.student_id},${p.subject_id},${p.date}`];
+            const key = `${p.student_id},${p.subject_id},${p.date}`;
+            attendanceData.data[key] = p.status;
+            delete updates[key];
         });
 
         renderTable();

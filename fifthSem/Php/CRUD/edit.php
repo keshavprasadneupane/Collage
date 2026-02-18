@@ -42,7 +42,7 @@ if (isset($_POST["save"])) {
     <form method="post" class="container">
         <div class="element">
             Name: <input type="text" name="name" required value="<?php echo htmlspecialchars($name); ?>">
-        </div class="element">
+        </div>
         <div class="element">
             Age: <input type="text" name="age" required value="<?php echo htmlspecialchars($age); ?>">
         </div>

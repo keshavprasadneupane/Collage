@@ -13,30 +13,40 @@
         th,
         td {
             border: 1px solid #333;
-            padding: 8px;
+            padding: 6px;
             text-align: center;
-            cursor: pointer;
         }
 
         th {
             background-color: #f4f4f4;
         }
 
-        td.present {
+        select.status-select {
+            width: 100%;
+            padding: 4px;
+            border: none;
+            text-align: center;
+        }
+
+        .present {
             background-color: #c8e6c9;
         }
 
-        td.absent {
+        .absent {
             background-color: #ffcdd2;
         }
 
-        .nav-buttons {
-            margin-bottom: 10px;
+        .notset {
+            background-color: #eeeeee;
         }
 
         #submit-btn {
             margin-top: 10px;
             padding: 6px 12px;
+        }
+
+        .top-bar {
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -46,10 +56,9 @@
     <h1>Class Attendance</h1>
     <button onclick="logout()">Logout</button>
 
-    <div class="nav-buttons">
-        <button id="prev-day">&lt;</button>
-        <span id="current-date"></span>
-        <button id="next-day">&gt;</button>
+    <div class="top-bar">
+        <label>Select Subject:</label>
+        <select id="subject-select"></select>
     </div>
 
     <table>
@@ -60,7 +69,6 @@
     <button id="submit-btn">Submit Updates</button>
 
     <script src="script.js"></script>
-    </script>
 
 </body>
 

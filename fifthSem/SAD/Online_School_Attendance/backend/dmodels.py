@@ -1,6 +1,6 @@
 # simple_models.py
 from enum import Enum
-from sqlalchemy import Integer, String, ForeignKey, Date, Boolean,sql
+from sqlalchemy import Integer, String, ForeignKey, UniqueConstraint, sql
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from database import Base
 
@@ -120,14 +120,19 @@ class AttendanceEnum(Enum):
 
 class Attendance(Base):
     __tablename__ = "attendance"
+    __table_args__ = (
+        UniqueConstraint('student_id', 'subject_id', 'date', name='uq_student_subject_date'),
+    )
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     student_id: Mapped[int] = mapped_column(Integer, ForeignKey("students.id"))
     subject_id: Mapped[int] = mapped_column(Integer, ForeignKey("subjects.id"))
-    status: Mapped[str] = mapped_column(String(1), nullable=False , server_default=sql.expression.text(f"'{AttendanceEnum.NOT_SET.value}'")) 
     # YYYY-MM-DD format, stored as string for simplicity of SAD lab report, but ideally should be Date type
     # string so i can easily show to my professor without worrying about date formatting issues in the report, 
     # but in a real app, Date type would be better
     date: Mapped[str] = mapped_column(String(10), nullable=False) 
+    status: Mapped[str] = mapped_column(String(1), nullable=False , server_default=sql.expression.text(f"'{AttendanceEnum.NOT_SET.value}'")) 
+   
 
     # relationships
     student: Mapped["Student"] = relationship("Student", back_populates="attendance")
