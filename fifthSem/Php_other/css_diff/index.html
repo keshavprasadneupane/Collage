@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CSS Types Layout</title>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Internal CSS -->
+    <style>
+        .internal-box {
+            border: 3px dashed black;
+            padding: 15px;
+            margin: 15px;
+            font-family: Arial;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Simple Layout</h1>
+    </header>
+
+    <nav>
+        <a href="#">Home</a> |
+        <a href="#">About</a> |
+        <a href="#">Contact</a>
+    </nav>
+
+    <section class="content">
+
+        <div class="external-box">
+            EXTERNAL CSS BOX
+        </div>
+
+        <div class="internal-box">
+            INTERNAL CSS BOX
+        </div>
+
+        <div style="border:3px dotted black; padding:15px; margin:15px; 
+        font-weight:bold;">
+            INLINE CSS BOX
+        </div>
+
+    </section>
+
+    <footer>
+        Footer Section
+    </footer>
+
+</body>
+
+</html>

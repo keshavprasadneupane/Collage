@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Form Validation Demo</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 30px;
+        }
+
+        form {
+            width: 300px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+
+        .success {
+            color: green;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Registration Form</h2>
+
+    <form id="myForm" novalidate>
+        Name:<input type="text" id="name" placeholder="Enter name">
+        <div id="nameError" class="error"></div>
+
+        Email: <input type="email" id="email" placeholder="Enter email">
+        <div id="emailError" class="error"></div>
+
+        Password:<input type="password" id="password" placeholder="Enter password">
+        <div id="passwordError" class="error"></div>
+
+        <button type="submit">Register</button>
+        <div id="successMessage" class="success"></div>
+    </form>
+
+    <script>
+        // Get form and input elements
+        const form = document.getElementById("myForm");
+        const nIn = document.getElementById("name");
+        const eIn = document.getElementById("email");
+        const pIn = document.getElementById("password");
+
+        const nEr = document.getElementById("nameError");
+        const eEr = document.getElementById("emailError");
+        const pEr = document.getElementById("passwordError");
+        const sM = document.getElementById("successMessage");
+
+        // Event handling for form submit
+        form.addEventListener("submit", function (event) {
+            event.preventDefault(); // prevent default form submission
+
+            // Clear previous messages
+            nEr.textContent = "";
+            eEr.textContent = "";
+            pEr.textContent = "";
+            sM.textContent = "";
+
+            let valid = true;
+
+            // Check required fields
+            if (nIn.value.trim() === "") {
+                nEr.textContent = "Name is required.";
+                valid = false;
+            }
+
+            if (eIn.value.trim() === "") {
+                eEr.textContent = "Email is required.";
+                valid = false;
+            } else {
+                // Email format check
+                const ePat = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+                if (!ePat.test(eIn.value.trim())) {
+                    eEr.textContent = "Invalid email format.";
+                    valid = false;
+                }
+            }
+
+            if (pIn.value.trim() === "") {
+                pEr.textContent = "Password is required.";
+                valid = false;
+            } else if (pIn.value.length < 6) {
+                pEr.textContent = "Password must be at least 6 characters.";
+                valid = false;
+            }
+
+            // Show success message if valid
+            if (valid) {
+                sM.textContent = "Form submitted successfully!";
+                form.reset();
+            }
+        });
+    </script>
+
+</body>
+
+</html>

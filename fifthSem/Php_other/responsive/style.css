@@ -1,0 +1,64 @@
+/* Default Desktop Style */
+
+body {
+    margin: 0;
+    font-family: Arial;
+}
+
+header,
+footer {
+    background: black;
+    color: white;
+    text-align: center;
+    padding: 15px;
+}
+
+nav {
+    background: gray;
+    text-align: center;
+    padding: 10px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+}
+
+.container {
+    display: flex;
+    /* Side by side on desktop */
+}
+
+.sidebar {
+    width: 30%;
+    padding: 20px;
+    background: lightgray;
+}
+
+.content {
+    width: 70%;
+    padding: 20px;
+}
+
+/* -------------------- */
+/* Mobile View */
+@media (max-width: 768px) {
+
+    .container {
+        flex-direction: column;
+        /* Stack vertically */
+    }
+
+    .sidebar,
+    .content {
+        width: 100%;
+        /* Full width */
+    }
+
+    nav a {
+        display: block;
+        /* Vertical menu */
+        margin: 10px 0;
+    }
+}

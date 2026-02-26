@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Html Only Form</title>
+    <style>
+        .element {
+            padding: 3px;
+        }
+
+        #form {
+            border: 1px solid black;
+            width: 300px;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>HTML Form Example</h1>
+    <form id="form">
+        <div class="element">
+            Name:<input type="text" id="name">
+        </div>
+        <div class="element">
+            Email:<input type="email" id="email">
+        </div>
+        <div class="element">
+            Password:<input type="password" id="password">
+        </div>
+        <div class="element">
+            Gender: <input type="radio" id="male" name="gender" value="male">male
+            <input type="radio" id="female" name="gender" value="female">female
+        </div>
+        <div class="element">
+            Hobbies: <input type="text" id="hobbies">
+        </div>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+
+</html>

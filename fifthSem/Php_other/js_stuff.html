@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>JS Demo</title>
+</head>
+
+<body>
+
+    <h1>JS Demo: Variables, Operators, Conditionals, Loops, Functions</h1>
+
+    <button onclick="runDemo()">Run Demo</button>
+
+    <script>
+        function runDemo() {
+
+            let name = prompt("Enter your name:");
+            let age = parseInt(prompt("Enter your age:"));
+
+            let condition = (age >= 18) ? "adult" : "minor";
+            alert("Hello " + name + "! You are " + condition + ".");
+
+            let n1 = parseInt(prompt("Enter first number:"));
+            let n2 = parseInt(prompt("Enter second number:"));
+            let sum = n1 + n2;
+            let product = n1 * n2;
+
+            alert("Sum: " + sum + "\nProduct: " + product);
+
+            let count = parseInt(prompt("Enter a num to see its table:"));
+            let table = "";
+            for (let i = 1; i <= 10; i++) {
+                table += count + " x " + i + " = " + (count * i) + "\n";
+            }
+            alert("Multiplication Table:\n" + table);
+
+            function isEven(num) { return !(num & 1); }
+
+            if (confirm("Do you want to check if a number is even?")) {
+                let num = parseInt(prompt("Enter a number:"));
+                let out = isEven(num) ? "even" : "odd";
+                alert(num + " is " + out + ".");
+            }
+            alert("Demo Completed!");
+        }
+    </script>
+
+</body>
+
+</html>
