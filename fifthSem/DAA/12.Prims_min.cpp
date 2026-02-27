@@ -1,67 +1,58 @@
-#include <bits/stdc++.h>
+#include <climits>
+#include <iostream>
+#include <vector>
 using namespace std;
 
-// Number of vertices in the graph
-#define V 5
-
-int minKey(int key[], bool mstSet[]) {
-	// Initialize min value
-	int min = INT_MAX, min_index;
-
-	for (int v = 0; v < V; v++)
-		if (mstSet[v] == false && key[v] < min)
-			min = key[v], min_index = v;
-
+int minKey(const vector<int> &key, const vector<bool> &mstSet) {
+	int minVal = INT_MAX;
+	int min_index = -1;
+	for (int v = 0; v < key.size(); v++) {
+		if (!mstSet[v] && key[v] < minVal) {
+			minVal = key[v];
+			min_index = v;
+		}
+	}
 	return min_index;
 }
 
-void printMST(int parent[], int graph[V][V]) {
+void printMST(const vector<int> &parent, const vector<vector<int>> &graph) {
 	cout << "Edge \tWeight\n";
-	for (int i = 1; i < V; i++)
-		cout << parent[i] << " - " << i << " \t" << graph[i][parent[i]]
-			 << " \n";
+	for (int i = 1; i < graph.size(); i++) {
+		cout << parent[i] << " - " << i << " \t" << graph[i][parent[i]] << "\n";
+	}
 }
 
-void primMST(int graph[V][V]) {
+void primMST(const vector<vector<int>> &graph) {
+	int V = graph.size();
+	vector<int> parent(V), key(V, INT_MAX);
+	vector<bool> mstSet(V, false);
 
-	int parent[V];
-	int key[V];
-	bool mstSet[V];
-
-	// Initialize all keys as INFINITE
-	for (int i = 0; i < V; i++)
-		key[i] = INT_MAX, mstSet[i] = false;
 	key[0] = 0;
 	parent[0] = -1;
 
-	// The MST will have V vertices
-	for (int count = 0; count < V - 1; count++) {
-
+	for (int i = 0; i < V - 1; i++) {
 		int u = minKey(key, mstSet);
-
-		// Add the picked vertex to the MST Set
 		mstSet[u] = true;
-
-		for (int v = 0; v < V; v++)
-
-			if (graph[u][v] && mstSet[v] == false && graph[u][v] < key[v])
-				parent[v] = u, key[v] = graph[u][v];
+		for (int v = 0; v < V; v++) {
+			if (graph[u][v] && !mstSet[v] && graph[u][v] < key[v]) {
+				parent[v] = u;
+				key[v] = graph[u][v];
+			}
+		}
 	}
-
-	// Print the constructed MST
 	printMST(parent, graph);
 }
 
-// Driver's code
 int main() {
-	int graph[V][V] = {{0, 2, 0, 6, 0},
-					   {2, 0, 3, 8, 5},
-					   {0, 3, 0, 0, 7},
-					   {6, 8, 0, 0, 9},
-					   {0, 5, 7, 9, 0}};
-
-	// Print the solution
+	int size = 10;
+	vector<vector<int>> graph(size, vector<int>(size, 0));
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			if (i != j) {
+				graph[i][j] = rand() % 10 + 1;
+			}
+		}
+	}
 	primMST(graph);
-
 	return 0;
 }

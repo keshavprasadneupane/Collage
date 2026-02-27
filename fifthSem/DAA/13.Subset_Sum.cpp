@@ -2,7 +2,6 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-
 int total_nodes = 0;
 
 void printSubset(const vector<int> &subset) {
@@ -37,7 +36,7 @@ void subsetSum(const vector<int> &arr, vector<int> &current, int index,
 }
 
 void generateSubsets(vector<int> &arr, int target) {
-	sort(arr.begin(), arr.end()); // Sort for pruning
+	sort(arr.begin(), arr.end());
 
 	int total = 0;
 	for (int num : arr)
@@ -54,6 +53,5 @@ int main() {
 	int target = 53;
 	generateSubsets(weights, target);
 	cout << "Nodes generated: " << total_nodes << endl;
-
 	return 0;
 }

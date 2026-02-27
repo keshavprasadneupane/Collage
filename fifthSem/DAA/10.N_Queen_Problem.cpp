@@ -1,71 +1,65 @@
 #include <iostream>
-#define N 4
 using namespace std;
-
+const int N = 4;
 int count = 0;
 
 void printSolution(int board[N][N]) {
 	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < N; j++)
-			if (board[i][j])
-				cout << "Q ";
+		for (int j = 0; j < N; j++) {
+			if (board[i][j] == 1)
+				cout << "Q";
 			else
-				cout << ". ";
-		printf("\n");
+				cout << ".";
+		}
+		cout << endl;
 	}
 }
 
 bool isSafe(int board[N][N], int row, int col) {
-	int i, j;
-
-	for (i = 0; i < col; i++) {
-		if (board[row][i]) {
+	// Check left side of current row
+	for (int i = 0; i < col; i++) {
+		if (board[row][i] == 1) {
 			count++;
 			return false;
 		}
-		count = count + 4;
+		count += 4;
 	}
 
-	for (i = row, j = col; i >= 0 && j >= 0; i--, j--) {
-		if (board[i][j]) {
-			count = count + 1;
+	// Check upper-left diagonal
+	for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+		if (board[i][j] == 1) {
+			count++;
 			return false;
 		}
-
-		count = count + 6;
+		count += 6;
 	}
 
-	for (i = row, j = col; j >= 0 && i < N; i++, j--) {
-		if (board[i][j]) {
-			count = count + 1;
+	// Check lower-left diagonal
+	for (int i = row, j = col; i < N && j >= 0; i++, j--) {
+		if (board[i][j] == 1) {
+			count++;
 			return false;
 		}
-		count = count + 6;
+		count += 6;
 	}
-
 	return true;
 }
 
 bool solveNQUtil(int board[N][N], int col) {
-
 	if (col >= N) {
 		count++;
 		return true;
 	}
 
 	for (int i = 0; i < N; i++) {
-
 		if (isSafe(board, i, col)) {
-
 			board[i][col] = 1;
 			count++;
-
 			if (solveNQUtil(board, col + 1)) {
 				count++;
 				return true;
 			}
-
-			board[i][col] = 0;
+			board[i][col] = 0; // backtrack
 		}
 	}
 
@@ -73,19 +67,18 @@ bool solveNQUtil(int board[N][N], int col) {
 }
 
 bool solveNQ() {
-	int board[N][N] = {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
+	int board[N][N] = {0}; // initialize all to 0
 
-	if (solveNQUtil(board, 0) == false) {
-		cout << "Solution does not exist";
+	if (!solveNQUtil(board, 0)) {
+		cout << "Solution does not exist" << endl;
 		return false;
 	}
-
 	printSolution(board);
 	return true;
 }
 
 int main() {
 	solveNQ();
-	cout << "No. of required steps :" << count;
+	cout << "No. of required steps: " << count << endl;
 	return 0;
 }

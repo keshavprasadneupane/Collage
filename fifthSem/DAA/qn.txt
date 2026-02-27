@@ -1,14 +1,14 @@
-DAA_Lab 1: Implementation of Bubble , selection and Insertions Sort and Number of step required. 
-DAA_Lab2 : implementation of Merge sort 
-DAA_Lab3 : implementation of Quick Sort
-DAA_Lab4 : implementation of Randomized Quick Sort 
+DAA_Lab 1: implementation of Bubble , selection and Insertions Sort and Number of step required. 
+DAA_Lab 2: implementation of Merge sort and Number of step required. 
+DAA_Lab 3: implementation of Quick Sort and Number of step required. 
+DAA_Lab 4: implementation of Randomized Quick Sort and Number of step required. 
 DAA_Lab 5: implementation of 0/1 Knapsack problem using Dynamic approach
 DAA_Lab 6: implementation Of Matrix chain Multiplication Problem
-DAA_Lab 7: Implementation of String Editing
-DAA_Lab 8: Program for Floyd Warshall Algorithm
-DAA_Lab 9: program for Dijkstra's single source shortest path
-DAA_Lab 10: program to solve N Queen Problem using backtracking
-DAA_Lab 11 : Kruskal's algorithm to find Minimum Spanning Tree of a given connected, undirected graph
-DAA_Lab 12 :program for Prim's Minimum
-DAA_Lab 13 : implementation of Subset sum problem
+DAA_Lab 7: implementation of String Editing
+DAA_Lab 8: implementation program for Floyd Warshall Algorithm
+DAA_Lab 9: implementation program for Dijkstra's single source shortest path
+DAA_Lab 10: implementation program to solve N Queen Problem using backtracking
+DAA_Lab 11: implementation Kruskal's algorithm to find Minimum Spanning Tree of a given connected, undirected graph
+DAA_Lab 12: implementation program for Prim's Minimum
+DAA_Lab 13: implementation of Subset sum problem
 DAA_Lab 14: implementation of job sequence in deadlines

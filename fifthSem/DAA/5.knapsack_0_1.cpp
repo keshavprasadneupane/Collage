@@ -1,6 +1,5 @@
 #include <iostream>
 using namespace std;
-
 int c[100][100];
 
 void Knapsack(int W, int n, int wt[], int v[]) {
@@ -36,9 +35,7 @@ int main() {
 		cout << "Enter weight and value of item [" << (i + 1) << "]: ";
 		cin >> w[i] >> v[i];
 	}
-
 	Knapsack(W, n, w, v);
-
 	cout << "\nKnapsack DP Table:\n";
 	for (int i = 0; i <= n; i++) {
 		for (int wt = 0; wt <= W; wt++) {

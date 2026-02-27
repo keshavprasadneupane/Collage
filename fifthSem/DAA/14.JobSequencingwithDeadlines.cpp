@@ -5,8 +5,7 @@ using namespace std;
 
 struct Job {
 	char id;
-	int deadline;
-	int profit;
+	int deadline, profit;
 };
 
 void jobScheduling(vector<Job> &jobs) {

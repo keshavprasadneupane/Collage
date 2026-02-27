@@ -11,7 +11,6 @@ void printOptimalParenthesis(vector<vector<int>> &s, int i, int j) {
 		cout << "A" << i;
 		return;
 	}
-
 	cout << "(";
 	printOptimalParenthesis(s, i, s[i][j]);
 	printOptimalParenthesis(s, s[i][j] + 1, j);
@@ -40,7 +39,7 @@ int MatrixChainOrder(int p[], int n) {
 				if (q < m[i][j]) {
 					m[i][j] = q;
 					s[i][j] = k;
-					c++;
+					c += 3;
 				}
 
 				c += 5;

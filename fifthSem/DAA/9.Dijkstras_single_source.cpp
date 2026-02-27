@@ -1,20 +1,18 @@
+#include <climits>
 #include <iostream>
 using namespace std;
-#include <limits.h>
-
-#define V 9
+const int V = 9;
 int count = 0;
 
 int minDistance(int dist[], bool sptSet[]) {
-
 	int min = INT_MAX, min_index;
-	for (int v = 0; v < V; v++)
+	for (int v = 0; v < V; v++) {
 		if (sptSet[v] == false && dist[v] <= min) {
 			min = dist[v], min_index = v;
-			count = count + 4;
+			count += 4;
 		}
-	count = count + 4;
-
+	}
+	count += 4;
 	return min_index;
 }
 
@@ -25,14 +23,13 @@ void printSolution(int dist[]) {
 }
 
 void dijkstra(int graph[V][V], int src) {
+	count = 0;
 	int dist[V];
-
 	bool sptSet[V];
-
 	for (int i = 0; i < V; i++)
 		dist[i] = INT_MAX, sptSet[i] = false;
 	dist[src] = 0;
-	count = count + 3;
+	count += 3;
 
 	for (int i = 0; i < V - 1; i++) {
 
@@ -40,15 +37,15 @@ void dijkstra(int graph[V][V], int src) {
 		sptSet[u] = true;
 		count++;
 
-		for (int v = 0; v < V; v++)
+		for (int v = 0; v < V; v++) {
 			if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX &&
 				dist[u] + graph[u][v] < dist[v]) {
 				dist[v] = dist[u] + graph[u][v];
-				count = count + 6;
+				count += 6;
 			}
-		count = count + 5;
+		}
+		count += 5;
 	}
-
 	printSolution(dist);
 }
 
