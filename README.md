@@ -1,2 +1,2 @@
-# Collage
- Repo for all collage related project or lab report
+# College
+Repo containing all college lab report-related programs from 5th semester and above.
