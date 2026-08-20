@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Employee Registry</title>
+	<style>
+		body {
+			font-family: system-ui, -apple-system, sans-serif;
+			max-width: 700px;
+			margin: 2rem auto;
+			padding: 0 1rem;
+		}
+
+		form {
+			display: grid;
+			gap: 0.5rem;
+			margin-bottom: 2rem;
+		}
+
+		input,
+		button {
+			padding: 0.6rem;
+			font-size: 1rem;
+		}
+
+		button {
+			background-color: #0066cc;
+			color: white;
+			border: none;
+			cursor: pointer;
+			border-radius: 4px;
+		}
+
+		button:hover {
+			background-color: #004999;
+		}
+
+		.btn-edit {
+			background-color: #f0ad4e;
+			margin-right: 0.3rem;
+		}
+
+		.btn-edit:hover {
+			background-color: #ec971f;
+		}
+
+		.btn-delete {
+			background-color: #d9534f;
+		}
+
+		.btn-delete:hover {
+			background-color: #c9302c;
+		}
+
+		.btn-cancel {
+			background-color: #777;
+			margin-left: 0.5rem;
+		}
+
+		.btn-cancel:hover {
+			background-color: #555;
+		}
+
+		ul {
+			list-style: none;
+			padding: 0;
+		}
+
+		li {
+			padding: 0.75rem;
+			border: 1px solid #ddd;
+			margin-bottom: 0.5rem;
+			border-radius: 4px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.edit-mode {
+			display: grid;
+			gap: 0.5rem;
+			width: 100%;
+		}
+
+		.action-btns {
+			display: flex;
+		}
+	</style>
+</head>
+
+<body>
+
+	<h2>Employee Registry</h2>
+
+	<form id="empForm">
+		<input id="firstName" placeholder="First Name" required />
+		<input id="lastName" placeholder="Last Name" required />
+		<input id="email" type="email" placeholder="Email" required />
+		<input id="department" placeholder="Department" required />
+		<button type="submit">Add Employee</button>
+	</form>
+
+	<ul id="empList"></ul>
+
+	<script>
+		const API = '/api/employees';
+
+		async function loadEmployees() {
+			const res = await fetch(API);
+			const employees = await res.json();
+			const list = document.getElementById('empList');
+
+			list.innerHTML = employees.map(e => `
+        <li id="emp-${e.id}">
+          <div>
+            <strong>${e.firstName} ${e.lastName}</strong><br>
+            <small>${e.department} — ${e.email}</small>
+          </div>
+          <div class="action-btns">
+            <button class="btn-edit" onclick="renderEditMode(${e.id}, '${e.firstName}', '${e.lastName}', '${e.email}', '${e.department}')">Edit</button>
+            <button class="btn-delete" onclick="deleteEmp(${e.id})">Delete</button>
+          </div>
+        </li>
+      `).join('');
+		}
+
+		document.getElementById('empForm').onsubmit = async (e) => {
+			e.preventDefault();
+			const employee = {
+				firstName: document.getElementById('firstName').value,
+				lastName: document.getElementById('lastName').value,
+				email: document.getElementById('email').value,
+				department: document.getElementById('department').value
+			};
+
+			await fetch(API, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(employee)
+			});
+
+			e.target.reset();
+			loadEmployees();
+		};
+
+		function renderEditMode(id, firstName, lastName, email, department) {
+			const li = document.getElementById(`emp-${id}`);
+			li.innerHTML = `
+        <div class="edit-mode">
+          <input id="edit-fn-${id}" value="${firstName}" />
+          <input id="edit-ln-${id}" value="${lastName}" />
+          <input id="edit-em-${id}" value="${email}" />
+          <input id="edit-dp-${id}" value="${department}" />
+          <div>
+            <button onclick="saveEdit(${id})">Save</button>
+            <button class="btn-cancel" onclick="loadEmployees()">Cancel</button>
+          </div>
+        </div>
+      `;
+		}
+
+		async function saveEdit(id) {
+			const updated = {
+				firstName: document.getElementById(`edit-fn-${id}`).value,
+				lastName: document.getElementById(`edit-ln-${id}`).value,
+				email: document.getElementById(`edit-em-${id}`).value,
+				department: document.getElementById(`edit-dp-${id}`).value
+			};
+
+			await fetch(`${API}/${id}`, {
+				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(updated)
+			});
+
+			loadEmployees();
+		}
+
+		async function deleteEmp(id) {
+			if (!confirm("Are you sure you want to delete this employee?")) return;
+			await fetch(`${API}/${id}`, { method: 'DELETE' });
+			loadEmployees();
+		}
+
+		loadEmployees();
+	</script>
+</body>
+
+</html>

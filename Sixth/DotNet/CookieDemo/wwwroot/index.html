@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>JS Cookie Management</title>
+	<style>
+		body {
+			font-family: system-ui, -apple-system, sans-serif;
+			max-width: 550px;
+			margin: 2rem auto;
+			padding: 0 1rem;
+		}
+
+		.card {
+			background: #f9f9f9;
+			padding: 1.2rem;
+			border-radius: 6px;
+			border: 1px solid #ddd;
+			margin-bottom: 1.5rem;
+		}
+
+		form {
+			display: grid;
+			gap: 0.6rem;
+		}
+
+		input,
+		button {
+			padding: 0.6rem;
+			font-size: 1rem;
+		}
+
+		button {
+			background-color: #0066cc;
+			color: white;
+			border: none;
+			cursor: pointer;
+			border-radius: 4px;
+		}
+
+		button:hover {
+			background-color: #004999;
+		}
+
+		.btn-delete {
+			background-color: #d9534f;
+			margin-left: 0.5rem;
+		}
+
+		.btn-delete:hover {
+			background-color: #c9302c;
+		}
+
+		.cookie-box {
+			background: #e8f5e9;
+			padding: 1rem;
+			border-radius: 4px;
+			border: 1px solid #c8e6c9;
+		}
+
+		.empty-box {
+			background: #ffebee;
+			padding: 1rem;
+			border-radius: 4px;
+			border: 1px solid #ffcdd2;
+			color: #c62828;
+		}
+	</style>
+</head>
+
+<body>
+
+	<h2>JavaScript Cookie Management</h2>
+
+	<!-- Set / Update Cookie Form -->
+	<div class="card">
+		<h3>Set / Update Cookie</h3>
+		<form id="cookieForm">
+			<input id="cookieName" placeholder="Cookie Name (e.g. user_theme)" required />
+			<input id="cookieValue" placeholder="Cookie Value (e.g. dark_mode)" required />
+			<input id="cookieDays" type="number" placeholder="Expiry in Days (e.g. 7)" required />
+			<button type="submit">Save Cookie</button>
+		</form>
+	</div>
+
+	<!-- Read or Delete Cookie Form -->
+	<div class="card">
+		<h3>Read or Delete Specific Cookie</h3>
+		<div style="display: flex;">
+			<input id="searchName" placeholder="Enter Cookie Name" style="flex: 1;" />
+			<button onclick="handleRead()" style="margin-left: 0.5rem;">Read</button>
+			<button class="btn-delete" onclick="handleDelete()">Delete</button>
+		</div>
+		<div id="displayArea" style="margin-top: 1rem;"></div>
+	</div>
+
+	<!-- Raw Cookies View -->
+	<div class="card">
+		<h3>All Active Cookies (`document.cookie`)</h3>
+		<pre id="rawCookies">None</pre>
+	</div>
+
+	<script>
+		// 1. SET / CREATE COOKIE
+		function setCookie(name, value, days) {
+			let expires = "";
+			if (days) {
+				const date = new Date();
+				date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+				expires = "; expires=" + date.toUTCString();
+			}
+			document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}${expires}; path=/; SameSite=Lax`;
+		}
+
+		// 2. READ COOKIE
+		function getCookie(name) {
+			const nameEQ = encodeURIComponent(name) + "=";
+			const ca = document.cookie.split(';');
+			for (let i = 0; i < ca.length; i++) {
+				let c = ca[i].trim();
+				if (c.indexOf(nameEQ) === 0) {
+					return decodeURIComponent(c.substring(nameEQ.length, c.length));
+				}
+			}
+			return null;
+		}
+
+		// 3. DELETE COOKIE (Set expiration to past)
+		function eraseCookie(name) {
+			document.cookie = `${encodeURIComponent(name)}=; Max-Age=-99999999; path=/;`;
+		}
+
+		// --- DOM Handlers ---
+
+		document.getElementById('cookieForm').onsubmit = (e) => {
+			e.preventDefault();
+			const name = document.getElementById('cookieName').value.trim();
+			const value = document.getElementById('cookieValue').value.trim();
+			const days = parseInt(document.getElementById('cookieDays').value);
+
+			setCookie(name, value, days);
+			updateRawDisplay();
+			alert(`Cookie '${name}' set successfully!`);
+		};
+
+		function handleRead() {
+			const name = document.getElementById('searchName').value.trim();
+			const val = getCookie(name);
+			const display = document.getElementById('displayArea');
+
+			if (val !== null) {
+				display.innerHTML = `<div class="cookie-box"><strong>${name}:</strong> ${val}</div>`;
+			} else {
+				display.innerHTML = `<div class="empty-box">Cookie '${name}' not found.</div>`;
+			}
+		}
+
+		function handleDelete() {
+			const name = document.getElementById('searchName').value.trim();
+			if (!name) return;
+
+			eraseCookie(name);
+			document.getElementById('displayArea').innerHTML = `<div class="empty-box">Cookie '${name}' deleted.</div>`;
+			updateRawDisplay();
+		}
+
+		function updateRawDisplay() {
+			document.getElementById('rawCookies').textContent = document.cookie || "No active cookies";
+		}
+
+		updateRawDisplay();
+	</script>
+</body>
+
+</html>

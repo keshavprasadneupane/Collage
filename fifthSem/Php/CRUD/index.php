@@ -54,7 +54,7 @@ if (isset($_POST["save"])) {
                 $age =htmlspecialchars($row["age"]);
                 $dept = htmlspecialchars($row["department"]);
                 echo "<tr>
-                    <td>{$id}</td>
+                    <td>$id</td>
                     <td>{$name}</td>
                     <td>{$age}</td> 
                     <td>{$dept}</td>
