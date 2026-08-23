@@ -38,7 +38,7 @@ app.MapGet("/api/faculty", () =>
 	return Results.Ok(list);
 });
 
-// 2. RETRIEVE FEE BY COURSE ID (ADO.NET Parameterized Query)
+// 2. RETRIEVE FEE BY COURSE ID
 app.MapGet("/api/faculty/fee/{courseId}", (string courseId) =>
 {
 	using var conn = new SqliteConnection(ConnectionString);
@@ -88,41 +88,6 @@ app.MapPost("/api/faculty", (Faculty faculty) =>
 	{
 		return Results.BadRequest("CourseID already exists or invalid data.");
 	}
-});
-
-// 4. UPDATE RECORD
-app.MapPut("/api/faculty/{id}", (string id, Faculty updated) =>
-{
-	using var conn = new SqliteConnection(ConnectionString);
-	conn.Open();
-
-	using var cmd = conn.CreateCommand();
-	cmd.CommandText = @"
-        UPDATE FACULTY 
-        SET Course_Name = @name, No_of_Semester = @semesters, fee = @fee 
-        WHERE CourseID = @id;";
-
-	cmd.Parameters.AddWithValue("@id", id);
-	cmd.Parameters.AddWithValue("@name", updated.Course_Name);
-	cmd.Parameters.AddWithValue("@semesters", updated.No_of_Semester);
-	cmd.Parameters.AddWithValue("@fee", updated.Fee);
-
-	int rowsAffected = cmd.ExecuteNonQuery();
-	return rowsAffected > 0 ? Results.NoContent() : Results.NotFound();
-});
-
-// 5. DELETE RECORD
-app.MapDelete("/api/faculty/{id}", (string id) =>
-{
-	using var conn = new SqliteConnection(ConnectionString);
-	conn.Open();
-
-	using var cmd = conn.CreateCommand();
-	cmd.CommandText = "DELETE FROM FACULTY WHERE CourseID = @id;";
-	cmd.Parameters.AddWithValue("@id", id);
-
-	int rowsAffected = cmd.ExecuteNonQuery();
-	return rowsAffected > 0 ? Results.NoContent() : Results.NotFound();
 });
 
 app.Run();

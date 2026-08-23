@@ -7,8 +7,8 @@
 	<title>IOST Faculty Registry</title>
 	<style>
 		body {
-			font-family: system-ui, -apple-system, sans-serif;
-			max-width: 750px;
+			font-family: system-ui, sans-serif;
+			max-width: 650px;
 			margin: 2rem auto;
 			padding: 0 1rem;
 		}
@@ -16,71 +16,25 @@
 		.card {
 			background: #f9f9f9;
 			padding: 1rem;
-			border-radius: 6px;
 			border: 1px solid #ddd;
-			margin-bottom: 1.5rem;
+			border-radius: 6px;
+			margin-bottom: 1rem;
 		}
 
 		form {
-			display: grid;
-			gap: 0.5rem;
-		}
-
-		.search-group {
 			display: flex;
+			flex-wrap: wrap;
 			gap: 0.5rem;
 		}
 
-		.search-group input {
-			flex-grow: 1;
-		}
-
-		input,
-		button {
-			padding: 0.6rem;
-			font-size: 1rem;
+		input {
+			flex: 1 1 40%;
+			padding: 0.5rem;
 		}
 
 		button {
-			background-color: #0066cc;
-			color: white;
-			border: none;
+			padding: 0.5rem 1rem;
 			cursor: pointer;
-			border-radius: 4px;
-		}
-
-		button:hover {
-			background-color: #004999;
-		}
-
-		.btn-search {
-			background-color: #28a745;
-		}
-
-		.btn-search:hover {
-			background-color: #218838;
-		}
-
-		.btn-edit {
-			background-color: #f0ad4e;
-			margin-right: 0.3rem;
-		}
-
-		.btn-edit:hover {
-			background-color: #ec971f;
-		}
-
-		.btn-delete {
-			background-color: #d9534f;
-		}
-
-		.btn-delete:hover {
-			background-color: #c9302c;
-		}
-
-		.btn-cancel {
-			background-color: #777;
-			margin-left: 0.5rem;
 		}
 
 		ul {
@@ -90,36 +44,22 @@
 
 		li {
 			padding: 0.75rem;
-			border: 1px solid #ddd;
-			margin-bottom: 0.5rem;
-			border-radius: 4px;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			background: #fff;
+			border-bottom: 1px solid #ccc;
 		}
 
 		.fee-result {
 			background: #e8f5e9;
-			padding: 0.75rem;
+			padding: 0.5rem;
 			border-radius: 4px;
-			border: 1px solid #c8e6c9;
-			margin-top: 0.75rem;
+			margin-top: 0.5rem;
 		}
 
 		.fee-error {
 			background: #ffebee;
-			padding: 0.75rem;
-			border-radius: 4px;
-			border: 1px solid #ffcdd2;
-			margin-top: 0.75rem;
 			color: #c62828;
-		}
-
-		.edit-mode {
-			display: grid;
-			gap: 0.5rem;
-			width: 100%;
+			padding: 0.5rem;
+			border-radius: 4px;
+			margin-top: 0.5rem;
 		}
 	</style>
 </head>
@@ -128,76 +68,62 @@
 
 	<h2>IOST Faculty Registry</h2>
 
-	<!-- Insert Record Form -->
 	<div class="card">
 		<h3>Add New Course Record</h3>
 		<form id="facultyForm">
-			<input id="courseId" placeholder="Course ID (e.g. CS101)" required />
-			<input id="courseName" placeholder="Course Name (e.g. CSIT)" required />
-			<input id="semesters" type="number" placeholder="No. of Semesters" required />
-			<input id="fee" type="number" step="0.01" placeholder="Fee Amount" required />
+			<input name="courseID" placeholder="Course ID (e.g. CS101)" required />
+			<input name="course_Name" placeholder="Course Name (e.g. CSIT)" required />
+			<input name="no_of_Semester" type="number" placeholder="No. of Semesters" required />
+			<input name="fee" type="number" step="0.01" placeholder="Fee Amount" required />
 			<button type="submit">Insert Record</button>
 		</form>
 	</div>
 
-	<!-- Dynamic Fee Lookup by Course ID -->
 	<div class="card">
 		<h3>Lookup Fee by Course ID</h3>
-		<form id="searchForm" onsubmit="getFeeByCourseId(event)">
-			<div class="search-group">
-				<input id="searchCourseId" placeholder="Enter Course ID (e.g. CS101)" required />
-				<button type="submit" class="btn-search">Query Fee</button>
-			</div>
+		<form onsubmit="getFeeByCourseId(event)">
+			<input id="searchCourseId" placeholder="Enter Course ID" required />
+			<button type="submit">Query Fee</button>
 		</form>
 		<div id="feeDisplay"></div>
 	</div>
 
-	<!-- Record List -->
 	<h3>All Faculty Records</h3>
 	<ul id="facultyList"></ul>
 
 	<script>
 		const API = '/api/faculty';
 
-		async function loadRecords() {
-			const res = await fetch(API);
-			const records = await res.json();
-			const list = document.getElementById('facultyList');
+		const apiReq = (url, method = 'GET', body) =>
+			fetch(url, {
+				method,
+				headers: body ? { 'Content-Type': 'application/json' } : {},
+				body: body ? JSON.stringify(body) : null
+			});
 
-			list.innerHTML = records.map(f => `
-        <li id="item-${f.courseID}">
-          <div>
-            <strong>${f.course_Name}</strong> (${f.courseID})<br>
-            <small>Semesters: ${f.no_of_Semester} | Fee: $${f.fee}</small>
-          </div>
-          <div>
-            <button class="btn-edit" onclick="renderEditMode('${f.courseID}', '${f.course_Name}', ${f.no_of_Semester}, ${f.fee})">Edit</button>
-            <button class="btn-delete" onclick="deleteRecord('${f.courseID}')">Delete</button>
-          </div>
+		async function loadRecords() {
+			const res = await apiReq(API);
+			const records = await res.json();
+			document.getElementById('facultyList').innerHTML = records.map(f => `
+        <li>
+          <strong>${f.course_Name}</strong> (${f.courseID})<br>
+          <small>Semesters: ${f.no_of_Semester} | Fee: $${f.fee}</small>
         </li>
       `).join('');
 		}
 
 		document.getElementById('facultyForm').onsubmit = async (e) => {
 			e.preventDefault();
-			const record = {
-				courseID: document.getElementById('courseId').value,
-				course_Name: document.getElementById('courseName').value,
-				no_of_Semester: parseInt(document.getElementById('semesters').value),
-				fee: parseFloat(document.getElementById('fee').value)
-			};
+			const data = Object.fromEntries(new FormData(e.target));
+			data.no_of_Semester = parseInt(data.no_of_Semester);
+			data.fee = parseFloat(data.fee);
 
-			const res = await fetch(API, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(record)
-			});
-
+			const res = await apiReq(API, 'POST', data);
 			if (res.ok) {
 				e.target.reset();
 				loadRecords();
 			} else {
-				alert("Failed to insert record. Ensure CourseID is unique.");
+				alert('Failed to insert record.');
 			}
 		};
 
@@ -205,58 +131,15 @@
 			e.preventDefault();
 			const queryId = document.getElementById('searchCourseId').value.trim();
 			const display = document.getElementById('feeDisplay');
-
-			const res = await fetch(`${API}/fee/${encodeURIComponent(queryId)}`);
+			const res = await apiReq(`${API}/fee/${encodeURIComponent(queryId)}`);
 
 			if (res.ok) {
 				const data = await res.json();
-				display.innerHTML = `
-          <div class="fee-result">
-            <strong>Course:</strong> ${data.course_Name} (${data.courseID}) <br>
-            <strong>Fee:</strong> $${data.fee}
-          </div>`;
+				display.innerHTML = `<div class="fee-result"><strong>Course:</strong> ${data.course_Name} (${data.courseID})<br><strong>Fee:</strong> $${data.fee}</div>`;
 			} else {
-				const error = await res.json();
-				display.innerHTML = `<div class="fee-error">${error.message}</div>`;
+				const error = await res.json().catch(() => ({ message: 'Not found' }));
+				display.innerHTML = `<div class="fee-error">${error.message || 'Error fetching fee.'}</div>`;
 			}
-		}
-
-		function renderEditMode(id, name, semesters, fee) {
-			const li = document.getElementById(`item-${id}`);
-			li.innerHTML = `
-        <div class="edit-mode">
-          <input id="edit-name-${id}" value="${name}" />
-          <input id="edit-sem-${id}" type="number" value="${semesters}" />
-          <input id="edit-fee-${id}" type="number" step="0.01" value="${fee}" />
-          <div>
-            <button onclick="saveEdit('${id}')">Save</button>
-            <button class="btn-cancel" onclick="loadRecords()">Cancel</button>
-          </div>
-        </div>
-      `;
-		}
-
-		async function saveEdit(id) {
-			const updated = {
-				courseID: id,
-				course_Name: document.getElementById(`edit-name-${id}`).value,
-				no_of_Semester: parseInt(document.getElementById(`edit-sem-${id}`).value),
-				fee: parseFloat(document.getElementById(`edit-fee-${id}`).value)
-			};
-
-			await fetch(`${API}/${id}`, {
-				method: 'PUT',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(updated)
-			});
-
-			loadRecords();
-		}
-
-		async function deleteRecord(id) {
-			if (!confirm("Delete this faculty record?")) return;
-			await fetch(`${API}/${id}`, { method: 'DELETE' });
-			loadRecords();
 		}
 
 		loadRecords();

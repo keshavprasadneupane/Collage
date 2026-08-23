@@ -20,7 +20,6 @@ app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
-// --- Endpoints ---
 
 app.MapGet("/api/employees", async (AppDbContext db) =>
 	await db.Employees.ToListAsync());

@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>BAG Registry Management (EF Core)</title>
+	<title>BAG Registry</title>
 	<style>
 		body {
-			font-family: system-ui, -apple-system, sans-serif;
-			max-width: 800px;
+			font-family: sans-serif;
+			max-width: 600px;
 			margin: 2rem auto;
 			padding: 0 1rem;
 		}
@@ -16,85 +14,33 @@
 		.card {
 			background: #f9f9f9;
 			padding: 1rem;
-			border-radius: 6px;
 			border: 1px solid #ddd;
-			margin-bottom: 1.5rem;
+			margin-bottom: 1rem;
+			border-radius: 4px;
 		}
 
 		form {
-			display: grid;
-			gap: 0.5rem;
-		}
-
-		.inline-form {
 			display: flex;
 			gap: 0.5rem;
-		}
-
-		.inline-form input {
-			flex: 1;
+			flex-wrap: wrap;
+			margin-bottom: 0.5rem;
 		}
 
 		input,
 		button {
-			padding: 0.6rem;
-			font-size: 1rem;
-		}
-
-		button {
-			background-color: #0066cc;
-			color: white;
-			border: none;
-			cursor: pointer;
-			border-radius: 4px;
-		}
-
-		button:hover {
-			background-color: #004999;
-		}
-
-		.btn-update {
-			background-color: #f0ad4e;
-		}
-
-		.btn-update:hover {
-			background-color: #ec971f;
-		}
-
-		.btn-delete {
-			background-color: #d9534f;
-		}
-
-		.btn-delete:hover {
-			background-color: #c9302c;
-		}
-
-		.btn-search {
-			background-color: #28a745;
-		}
-
-		.btn-search:hover {
-			background-color: #218838;
-		}
-
-		ul {
-			list-style: none;
-			padding: 0;
+			padding: 0.5rem;
 		}
 
 		li {
-			padding: 0.75rem;
+			list-style: none;
+			padding: 0.5rem;
 			border: 1px solid #ddd;
-			margin-bottom: 0.5rem;
-			border-radius: 4px;
-			background: #fff;
+			margin-bottom: 0.25rem;
 		}
 
-		.res-box {
+		.res {
 			background: #e8f5e9;
-			padding: 0.75rem;
-			border-radius: 4px;
-			border: 1px solid #c8e6c9;
+			padding: 0.5rem;
 			margin-top: 0.5rem;
 		}
 	</style>
@@ -102,53 +48,47 @@
 
 <body>
 
-	<h2>BAG Registry (EF Core Operations)</h2>
+	<h2>BAG Registry Management</h2>
 
-	<!-- Insert Form -->
+	<!-- Add Bag -->
 	<div class="card">
-		<h3>Add New Bag Record</h3>
+		<h3>Add Bag</h3>
 		<form id="addForm">
-			<input id="brand" placeholder="Brand Name" required />
+			<input id="brand" placeholder="Brand" required />
 			<input id="price" type="number" step="0.01" placeholder="Price" required />
 			<input id="date" type="date" required />
-			<button type="submit">Insert Record</button>
+			<button>Add</button>
 		</form>
 	</div>
 
-	<!-- Operation 1: Update Price by Year -->
+	<!-- Operations -->
 	<div class="card">
-		<h3>1. Update Price by Target Year</h3>
-		<form onsubmit="updatePriceByYear(event)" class="inline-form">
-			<input id="updYear" type="number" placeholder="Year (e.g. 2022)" required />
-			<input id="newPrice" type="number" step="0.01" placeholder="New Price (e.g. 2000)" required />
-			<button type="submit" class="btn-update">Update Price</button>
+		<h3>1. Update Price by Year</h3>
+		<form onsubmit="updatePrice(event)">
+			<input id="updYear" type="number" placeholder="Year" required />
+			<input id="newPrice" type="number" step="0.01" placeholder="New Price" required />
+			<button>Update</button>
 		</form>
 		<div id="updRes"></div>
-	</div>
 
-	<!-- Operation 2: Delete by Year -->
-	<div class="card">
-		<h3>2. Delete Bags by Target Year</h3>
-		<form onsubmit="deleteByYear(event)" class="inline-form">
-			<input id="delYear" type="number" placeholder="Year (e.g. 1981)" required />
-			<button type="submit" class="btn-delete">Delete Records</button>
+		<h3>2. Delete by Year</h3>
+		<form onsubmit="deleteYear(event)">
+			<input id="delYear" type="number" placeholder="Year" required />
+			<button>Delete</button>
 		</form>
 		<div id="delRes"></div>
-	</div>
 
-	<!-- Operation 3: Retrieve Brands above Price Threshold -->
-	<div class="card">
-		<h3>3. Retrieve Brands Above Price Threshold</h3>
-		<form onsubmit="queryBrands(event)" class="inline-form">
-			<input id="minPrice" type="number" step="0.01" placeholder="Min Price (e.g. 500)" required />
-			<button type="submit" class="btn-search">Search Brands</button>
+		<h3>3. Search Brands Above Price</h3>
+		<form onsubmit="queryBrands(event)">
+			<input id="minPrice" type="number" step="0.01" placeholder="Min Price" required />
+			<button>Search</button>
 		</form>
 		<div id="brandRes"></div>
 	</div>
 
-	<!-- Full List -->
-	<h3>Current BAG Database Records</h3>
-	<ul id="bagList"></ul>
+	<!-- Bag List -->
+	<h3>Bag Records</h3>
+	<ul id="bagList" style="padding:0"></ul>
 
 	<script>
 		const API = '/api/bags';
@@ -156,71 +96,51 @@
 		async function loadBags() {
 			const res = await fetch(API);
 			const data = await res.json();
-			const list = document.getElementById('bagList');
-
-			list.innerHTML = data.map(b => `
-        <li>
-          <strong>ID: ${b.id}</strong> — <strong>Brand:</strong> ${b.brand} | 
-          <strong>Price:</strong> $${b.price} | 
-          <strong>Date:</strong> ${b.date.split('T')[0]}
-        </li>
-      `).join('');
+			document.getElementById('bagList').innerHTML = data.map(b =>
+				`<li><strong>#${b.id}</strong> ${b.brand} - NRS. ${b.price} (${b.date.split('T')[0]})</li>`
+			).join('');
 		}
-
 		document.getElementById('addForm').onsubmit = async (e) => {
 			e.preventDefault();
-			const bag = {
-				brand: document.getElementById('brand').value,
-				price: parseFloat(document.getElementById('price').value),
-				date: document.getElementById('date').value
-			};
-
 			await fetch(API, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(bag)
+				body: JSON.stringify({
+					brand: document.getElementById('brand').value,
+					price: parseFloat(document.getElementById('price').value),
+					date: document.getElementById('date').value
+				})
 			});
-
 			e.target.reset();
 			loadBags();
 		};
 
-		async function updatePriceByYear(e) {
+		async function updatePrice(e) {
 			e.preventDefault();
-			const year = document.getElementById('updYear').value;
-			const newPrice = document.getElementById('newPrice').value;
-
-			const res = await fetch(`${API}/update-price?year=${year}&newPrice=${newPrice}`, { method: 'PUT' });
+			const y = document.getElementById('updYear').value;
+			const p = document.getElementById('newPrice').value;
+			const res = await fetch(`${API}/update-price?year=${y}&newPrice=${p}`, { method: 'PUT' });
 			const data = await res.json();
-			document.getElementById('updRes').innerHTML = `<div class="res-box">${data.message}</div>`;
+			document.getElementById('updRes').innerHTML = `<div class="res">${data.message}</div>`;
 			loadBags();
 		}
 
-		async function deleteByYear(e) {
+		async function deleteYear(e) {
 			e.preventDefault();
-			const year = document.getElementById('delYear').value;
-
-			const res = await fetch(`${API}/delete-by-year?year=${year}`, { method: 'DELETE' });
+			const y = document.getElementById('delYear').value;
+			const res = await fetch(`${API}/delete-by-year?year=${y}`, { method: 'DELETE' });
 			const data = await res.json();
-			document.getElementById('delRes').innerHTML = `<div class="res-box">${data.message}</div>`;
+			document.getElementById('delRes').innerHTML = `<div class="res">${data.message}</div>`;
 			loadBags();
 		}
 
 		async function queryBrands(e) {
 			e.preventDefault();
-			const minPrice = document.getElementById('minPrice').value;
-
-			const res = await fetch(`${API}/brands-above-price?minPrice=${minPrice}`);
+			const p = document.getElementById('minPrice').value;
+			const res = await fetch(`${API}/brands-above-price?minPrice=${p}`);
 			const data = await res.json();
-
-			const display = document.getElementById('brandRes');
-			if (data.length === 0) {
-				display.innerHTML = `<div class="res-box">No brands found with price > $${minPrice}</div>`;
-				return;
-			}
-
-			display.innerHTML = `<div class="res-box"><strong>Matching Brands:</strong><br>` +
-				data.map(item => `- ${item.brand} ($${item.price})`).join('<br>') + `</div>`;
+			document.getElementById('brandRes').innerHTML = `<div class="res">${data.length ? data.map(b => `${b.brand} ($${b.price})`).join(', ') : 'No records found'
+				}</div>`;
 		}
 
 		loadBags();

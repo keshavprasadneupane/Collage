@@ -1,3 +1,13 @@
+# --- Ignore extensionless files (e.g. Linux C++ compiled binaries) ---
+# Must stay at the TOP: later rules below always win for their own targets,
+# so this only catches files nothing else claims.
+*
+!*/
+!*.*
+!LICENSE
+!Makefile
+!README
+
 # --- OS & IDE Specific ---
 .DS_Store
 Thumbs.db
@@ -9,12 +19,10 @@ Desktop.ini
 *.user
 *.userossc
 *.sln.docstates
-
 # --- Environment & Secret Files ---
 .env
 .env.*
 !.env.example
-
 # --- Old XAMPP / Bitnami Files ---
 /dashboard/
 /img/
@@ -23,7 +31,6 @@ Desktop.ini
 /bitnami.css
 /favicon.ico
 /index.php
-
 # --- .NET & ASP.NET ---
 [Bb]in/
 [Oo]bj/
@@ -35,7 +42,6 @@ Desktop.ini
 *.cache
 *.exe
 *.dll
-
 # --- Python & Jupyter Notebooks ---
 __pycache__/
 *.py[cod]
@@ -50,7 +56,6 @@ build/
 .ipynb_checkpoints/
 pip-log.txt
 pip-delete-this-directory.txt
-
 # --- Java & Kotlin ---
 *.class
 *.jar
@@ -59,7 +64,6 @@ pip-delete-this-directory.txt
 .gradle/
 build/
 target/
-
 # --- C / C++ ---
 *.o
 *.obj
@@ -70,7 +74,6 @@ target/
 *.a
 *.lib
 *.app/
-
 # --- Node.js / JavaScript / PHP ---
 node_modules/
 vendor/
@@ -78,27 +81,22 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 *.log
-
 # --- R Language ---
 .Rhistory
 .RData
 .Ruserdata
 *.Rproj.user
-
 # --- MATLAB ---
 *.asv
 *.m~
 slprj/
 *.mex*
-
 # --- Go & Rust ---
 /target/
 *.exe.test
-
 # --- Databases & Academic Datasets ---
 *.db
 *.sqlite
 *.sqlite3
-
 # Uncomment the line below if you store large dataset files locally
 # data/
