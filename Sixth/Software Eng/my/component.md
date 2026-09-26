@@ -16,34 +16,33 @@ A **Component Diagram** is a UML structural diagram that shows the major softwar
 ## Component Diagram for Inventory Management System
 
 The Inventory Management System consists of components such as User Interface, Product Management, Stock Management, Order Management, Report Management, and Database.
+# use https://plantuml.com/ to render
+@startuml
 
-```mermaid
-graph LR
+actor User
 
-    User["User"]
+component "User Interface" as UI
 
-    UI["User Interface"]
+component "Product Management" as PM
+component "Stock Management" as SM
+component "Order Management" as OM
+component "Report Management" as RM
 
-    PM["Product Management"]
-    SM["Stock Management"]
-    OM["Order Management"]
-    RM["Report Management"]
+database "Inventory Database" as DB
 
-    DB[("Inventory Database")]
+User --> UI
 
-    User --> UI
+UI --> PM
+UI --> SM
+UI --> OM
+UI --> RM
 
-    UI --> PM
-    UI --> SM
-    UI --> OM
-    UI --> RM
+PM --> DB
+SM --> DB
+OM --> DB
+RM --> DB
 
-    PM --> DB
-    SM --> DB
-    OM --> DB
-    RM --> DB
-```
-
+@enduml
 ---
 
 ## Component Description

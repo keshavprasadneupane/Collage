@@ -42,7 +42,8 @@ graph TD
 
 The Level 1 DFD decomposes the Library Management System into major processes such as User Management, Catalog & Search, Book Issue & Return, and Fine Management. It also shows the data stores used by these processes.
 
-```mermaid
+```mermaid id="v5y2ui"
+%%{init: {'themeVariables': { 'fontSize': '26px' }}}%%
 graph TD
 
     Member["Member"]
@@ -58,38 +59,40 @@ graph TD
     D3[("D3 Transaction Records")]
     D4[("D4 Fine Records")]
 
-    Member -->|Registration Details| P1
-    P1 --> D1
-    D1 --> P1
+    Member -->|Registration<br/>Details| P1
+    P1 -->|Member Data| D1
+    D1 -->|Member<br/>Information| P1
 
     Member -->|Search Request| P2
-    P2 --> D2
-    D2 --> P2
+    P2 -->|Book Query| D2
+    D2 -->|Book Details| P2
     P2 -->|Search Result| Member
 
     Librarian -->|Book Updates| P2
-    P2 --> D2
+    P2 -->|Updated Book<br/>Records| D2
 
-    Member -->|Issue / Return Request| P3
-    P3 --> D1
-    D1 --> P3
+    Member -->|Issue / Return<br/>Request| P3
+    P3 -->|Member Verification<br/>Request| D1
+    D1 -->|Member Status| P3
 
-    P3 --> D2
-    D2 --> P3
+    P3 -->|Book Availability<br/>Request| D2
+    D2 -->|Book Availability<br/>Details| P3
 
-    P3 --> D3
-    P3 -->|Issue Slip / Confirmation| Member
+    P3 -->|Transaction<br/>Record| D3
+    P3 -->|Issue Slip /<br/>Confirmation| Member
 
-    Librarian -->|Approve Transaction| P3
+    Librarian -->|Approve<br/>Transaction| P3
 
-    D3 -->|Overdue Information| P4
+    D3 -->|Overdue<br/>Information| P4
 
     P4 -->|Fine Notice| Member
     Member -->|Fine Payment| P4
 
-    P4 --> D4
+    P4 -->|Fine Record| D4
     P4 -->|Receipt| Member
 ```
+
+This keeps the DFD exactly the same while making it noticeably taller on the page.
 
 ---
 

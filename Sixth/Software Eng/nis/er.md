@@ -60,10 +60,13 @@ erDiagram
         int transaction_id FK
     }
 
-    MEMBER ||--o{ ISSUE_TRANSACTION : borrows
-    BOOK ||--o{ ISSUE_TRANSACTION : issued_in
-    LIBRARIAN ||--o{ ISSUE_TRANSACTION : manages
-    ISSUE_TRANSACTION ||--o| FINE : generates
+    MEMBER ||--o{ ISSUE_TRANSACTION : has
+
+    BOOK ||--o{ ISSUE_TRANSACTION : included_in
+
+    LIBRARIAN ||--o{ ISSUE_TRANSACTION : processes
+
+    ISSUE_TRANSACTION ||--o| FINE : results_in
 ```
 
 ---
@@ -81,3 +84,8 @@ erDiagram
 ## Conclusion
 
 The ER Diagram identifies the main entities of the Library Management System and their relationships. It serves as the foundation for database design by defining how data is organized and connected within the system.
+
+If your teacher wants a **proper ER diagram**, relationship names should be entities/diamonds (conceptually) rather than using class-style labels such as `borrows`, `issued_in`, and `manages`.
+
+A more database-oriented ER model is:
+

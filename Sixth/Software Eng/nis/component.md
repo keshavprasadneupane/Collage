@@ -17,42 +17,42 @@ A **Component Diagram** is a UML structural diagram that shows the organization 
 
 The Library Management System consists of components such as User Management, Catalog Management, Transaction Management, Fine Management, and Database components that work together to provide library services.
 
-```mermaid
-graph LR
+ # use https://plantuml.com/ to render
 
-    User["Member/Librarian/Admin"]
 
-    UI["User Interface"]
-    UM["User Management"]
-    CM["Catalog Management"]
-    TM["Transaction Management"]
-    FM["Fine Management"]
+@startuml
 
-    DB[("Library Database")]
+actor User
 
-    User --> UI
+component "User Interface" as UI
 
-    UI --> UM
-    UI --> CM
-    UI --> TM
-    UI --> FM
+component "User Management" as UM
+component "Catalog Management" as CM
+component "Transaction Management" as TM
+component "Fine Management" as FM
 
-    UM --> DB
-    CM --> DB
-    TM --> DB
-    FM --> DB
-```
+database "Library Database" as DB
+
+User --> UI
+
+UI --> UM
+UI --> CM
+UI --> TM
+UI --> FM
+
+UM --> DB
+CM --> DB
+TM --> DB
+FM --> DB
+
+@enduml
+
 
 ---
 
 ## Component Description
 
-* **User Interface** provides interaction between users and the system.
-* **User Management** handles registration and user information.
-* **Catalog Management** manages books and search operations.
-* **Transaction Management** handles book issue and return processes.
-* **Fine Management** calculates and manages fines.
-* **Library Database** stores all system data.
+The User Interface allows users to interact with the Inventory Management System. Product Management manages product information, Stock Management handles inventory updates, Order Management processes customer orders and invoices, and Report Management generates inventory and sales reports. All related data is stored in the Inventory Database.
 
 ---
 

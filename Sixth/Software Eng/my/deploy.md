@@ -17,21 +17,19 @@ A **Deployment Diagram** is a UML diagram that represents the physical deploymen
 
 The Inventory Management System can be deployed using client devices, an application server, and a database server. Users access the application through client devices, while the application server communicates with the database server.
 
-```mermaid
-graph TD
+# use https://plantuml.com/ to render
+@startuml
 
-    Client["Client Device
-    Manager / Customer"]
+node "Client Device\nManager / Customer" as Client
 
-    App["Application Server
-    Inventory </br> Management System"]
+node "Application Server\nInventory Management System" as App
 
-    DB["Database Server
-    Inventory Database"]
+database "Database Server\nInventory Database" as DB
 
-    Client <--> App
-    App <--> DB
-```
+Client <--> App
+App <--> DB
+
+@enduml
 
 ---
 

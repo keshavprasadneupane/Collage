@@ -1,24 +1,27 @@
-# QN.2 Draw the ER Diagram for Inventory Management System
+# QN.2 Draw the Physical Entity Relationship (PER) Diagram for Inventory Management System
 
-## Entity Relationship (ER) Diagram
+## Physical Entity Relationship (PER) Diagram
 
-An **Entity Relationship (ER) Diagram** is a graphical representation of the entities, attributes, and relationships in a database system. It helps in designing and organizing the database structure.
+A **Physical Entity Relationship (PER) Diagram** is a detailed representation of a database structure. It shows the entities, attributes, primary keys, foreign keys, data types, and relationships required for implementing the database. The PER diagram serves as a blueprint for database design and development.
 
-### Components of ER Diagram
+### Components of PER Diagram
 
-* **Entity:** A real-world object about which data is stored.
-* **Attribute:** A property or characteristic of an entity.
-* **Primary Key (PK):** Uniquely identifies each record.
-* **Foreign Key (FK):** Connects one entity with another.
-* **Relationship:** Shows the association between entities.
+* **Entity:** A database table that stores related information.
+* **Attribute:** A column that represents a property of an entity.
+* **Primary Key (PK):** An attribute that uniquely identifies each record in an entity.
+* **Foreign Key (FK):** An attribute that references another entity to establish a relationship.
+* **Relationship:** An association between two or more entities.
+* **Data Type:** Specifies the type of data stored in an attribute.
 
 ---
 
-## ER Diagram for Inventory Management System
+## PER Diagram for Inventory Management System
 
-The main entities are **Product, Supplier, Customer, Order, and Inventory**. These entities maintain information about products, stock, suppliers, and customer orders.
+The Inventory Management System consists of the entities **Product, Inventory, Supplier, Customer, and Order**. These entities store information related to products, stock levels, suppliers, customers, and purchase transactions. The relationships among the entities define how inventory data is organized and maintained within the database.
 
-```mermaid id="q4v8zn"
+## Diagram
+
+```mermaid 
 erDiagram
 
     PRODUCT {
@@ -63,17 +66,18 @@ erDiagram
     PRODUCT ||--o{ ORDER : included_in
 ```
 
+
 ---
 
 ## Relationship Description
 
-* A **Product** has a corresponding inventory record that stores its stock information.
-* A **Supplier** can supply multiple products.
-* A **Customer** can place multiple orders.
-* A **Product** can be included in multiple orders.
+* A **Product** has a corresponding **Inventory** record that stores stock information.
+* A **Supplier** can supply multiple **Products**.
+* A **Customer** can place multiple **Orders**.
+* A **Product** can be included in multiple **Orders**.
 
 ---
 
 ## Conclusion
 
-The ER Diagram represents the database structure of the Inventory Management System by showing its main entities, attributes, and relationships. It provides a clear foundation for designing the system database.
+The PER Diagram provides a detailed view of the Inventory Management System database by defining its entities, attributes, keys, data types, and relationships. It serves as the foundation for implementing and maintaining the database structure of the system.

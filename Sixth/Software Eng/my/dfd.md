@@ -46,41 +46,61 @@ The Level 1 DFD decomposes the Inventory Management System into major processes 
 graph TD
 
     Supplier["Supplier"]
+
     Manager["Manager"]
+
     Customer["Customer"]
 
     P1(("1.0 Product Management"))
+
     P2(("2.0 Stock Management"))
+
     P3(("3.0 Order Management"))
+
     P4(("4.0 Report Generation"))
 
     D1[("D1 Product Database")]
+
     D2[("D2 Stock Database")]
+
     D3[("D3 Order Records")]
+
     D4[("D4 Supplier Records")]
 
     Manager -->|Add / Update Product| P1
-    P1 --> D1
-    D1 --> P1
+
+    P1 -->|Product Data| D1
+
+    D1 -->|Product Information| P1
 
     Supplier -->|Supply Details| P2
-    P2 --> D2
-    P2 --> D4
+
+    P2 -->|Stock Update| D2
+
+    P2 -->|Supplier Information| D4
 
     Customer -->|Purchase Request| P3
-    P3 --> D1
-    D1 --> P3
 
-    P3 --> D2
-    D2 --> P3
+    P3 -->|Product Query| D1
 
-    P3 --> D3
+    D1 -->|Product Details| P3
+
+    P3 -->|Stock Availability Request| D2
+
+    D2 -->|Stock Availability Details| P3
+
+    P3 -->|Order Record| D3
+
     P3 -->|Invoice / Confirmation| Customer
 
     Manager -->|Report Request| P4
-    P4 --> D1
-    P4 --> D2
-    P4 --> D3
+
+    P4 -->|Product Data Request| D1
+
+    P4 -->|Stock Data Request| D2
+
+    P4 -->|Order Data Request| D3
+
     P4 -->|Inventory Report| Manager
 ```
 
@@ -89,3 +109,5 @@ graph TD
 ## Conclusion
 
 The Level 0 DFD provides an overall view of the Inventory Management System and its interaction with external entities. The Level 1 DFD shows the internal processes, data stores, and data flow involved in managing products, stock, orders, and reports.
+
+

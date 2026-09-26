@@ -12,32 +12,36 @@ A **Use Case Diagram** represents the functional requirements of a system by sho
 * **Association:** Shows interaction between an actor and a use case.
 
 ### Use Case Diagram for Inventory Management System
+# use https://plantuml.com/ to render
+@startuml
 
-```mermaid id="n2yjk8"
-flowchart LR
+left to right direction
 
-    Manager["Manager"]
-    Supplier["Supplier"]
-    Customer["Customer"]
+actor Manager
+actor Supplier
+actor Customer
 
-    subgraph IMS["Inventory Management System"]
-        UC1(("Manage Products"))
-        UC2(("Update Stock"))
-        UC3(("Place Order"))
-        UC4(("Generate Reports"))
-        UC5(("Supply Products"))
-        UC6(("Check Availability"))
-    end
+rectangle "Inventory Management System" {
 
-    Manager --- UC1
-    Manager --- UC2
-    Manager --- UC4
+    usecase "Manage Products" as UC1
+    usecase "Update Stock" as UC2
+    usecase "Place Order" as UC3
+    usecase "Generate Reports" as UC4
+    usecase "Supply Products" as UC5
+    usecase "Check Availability" as UC6
 
-    Supplier --- UC5
+}
 
-    Customer --- UC3
-    Customer --- UC6
-```
+Manager --> UC1
+Manager --> UC2
+Manager --> UC4
+
+Supplier --> UC5
+
+Customer --> UC3
+Customer --> UC6
+
+@enduml
 
 ### Description
 
