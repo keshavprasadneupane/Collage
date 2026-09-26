@@ -1,6 +1,6 @@
 # College
 
-This repository contains programs and lab report materials from the 5th semester onward.
+This repository contains programs and lab report materials for Bsc.Csit Lab reports
 
 * **2nd Semester:** Complete lab reports are available in handwritten format.
 * **3rd and 4th Semesters:** Only partial reports and selected subject materials are included.
